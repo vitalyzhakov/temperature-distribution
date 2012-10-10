@@ -9,19 +9,19 @@ CND_DISTDIR=dist
 # Debug configuration
 CND_PLATFORM_Debug=GNU-Linux-x86
 CND_ARTIFACT_DIR_Debug=dist/Debug/GNU-Linux-x86
-CND_ARTIFACT_NAME_Debug=temperaturedistribution
-CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux-x86/temperaturedistribution
+CND_ARTIFACT_NAME_Debug=temperature-distribution
+CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux-x86/temperature-distribution
 CND_PACKAGE_DIR_Debug=dist/Debug/GNU-Linux-x86/package
-CND_PACKAGE_NAME_Debug=temperaturedistribution.tar
-CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux-x86/package/temperaturedistribution.tar
+CND_PACKAGE_NAME_Debug=temperature-distribution.tar
+CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux-x86/package/temperature-distribution.tar
 # Release configuration
 CND_PLATFORM_Release=GNU-Linux-x86
 CND_ARTIFACT_DIR_Release=dist/Release/GNU-Linux-x86
-CND_ARTIFACT_NAME_Release=temperaturedistribution
-CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux-x86/temperaturedistribution
+CND_ARTIFACT_NAME_Release=temperature-distribution
+CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux-x86/temperature-distribution
 CND_PACKAGE_DIR_Release=dist/Release/GNU-Linux-x86/package
-CND_PACKAGE_NAME_Release=temperaturedistribution.tar
-CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux-x86/package/temperaturedistribution.tar
+CND_PACKAGE_NAME_Release=temperature-distribution.tar
+CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux-x86/package/temperature-distribution.tar
 #
 # include compiler specific variables
 #

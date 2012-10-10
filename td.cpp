@@ -291,7 +291,7 @@ int td::printMatrixToFile(char* path) {
     //Печатаем в файл
     FILE *outfile = fopen(path, "w");
 
-    fprintf(outfile, "x     y     z      f\n");
+    fprintf(outfile, "#x     y     z      f\n");
     for (int i = 0; i < N; i++) {
         float x = i * xStep;
         for (int j = 0; j < N; j++) {
