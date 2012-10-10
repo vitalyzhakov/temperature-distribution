@@ -15,16 +15,16 @@
  */
 int main(int argc, char** argv) {
     
-    td* solution = new td(10, 1, 0.0001, 0.003, 0.001);
+    td* solution = new td(100, 1, 0.0001, 0.003, 0.00001);
     
     solution->initMatrix();
     solution->enableDebugMode(100);
     solution->solve();
     
-    printf("IterationsCount = %d", solution->getIterationsCount());
+    printf("IterationsCount = %d\n", solution->getIterationsCount());
     
     
-    solution->printMatrixToFile("outfile.txt");
+    solution->printMatrixToFileGnuPlotFormat("outfile.txt", 10);
 
     return 0;
 }

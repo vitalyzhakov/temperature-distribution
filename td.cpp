@@ -10,6 +10,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
+#include <float.h>
+#include <algorithm>
+using namespace std;
 
 //Конструктор
 
@@ -69,23 +72,23 @@ int td::getIterationsCount() {
  */
 int td::initMatrix() {
 
-    //Инициализация массива для адекватной работы с памятью
-    solution = new float**[N];
-    tempSolution = new float**[N];
-    for (int i = 0; i < N; ++i) {
-        solution[i] = new float*[N];
-        tempSolution[i] = new float*[N];
+    //Инициализация массива для адекватной работы с памятью (N+1 элементов)
+    solution = new float**[N + 1];
+    tempSolution = new float**[N + 1];
+    for (int i = 0; i < N + 1; i++) {
+        solution[i] = new float*[N + 1];
+        tempSolution[i] = new float*[N + 1];
 
-        for (int j = 0; j < N; ++j) {
-            solution[i][j] = new float[N];
-            tempSolution[i][j] = new float[N];
+        for (int j = 0; j < N + 1; j++) {
+            solution[i][j] = new float[N + 1];
+            tempSolution[i][j] = new float[N + 1];
         }
     }
 
     //Заполнение нулями
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            for (int k = 0; k < N; k++) {
+    for (int i = 0; i < N + 1; i++) {
+        for (int j = 0; j < N + 1; j++) {
+            for (int k = 0; k < N + 1; k++) {
                 solution[i][j][k] = 0;
                 tempSolution[i][j][k] = 0;
             }
@@ -96,7 +99,7 @@ int td::initMatrix() {
     xStep = dimencity / N;
     yStep = dimencity / N;
     zStep = dimencity / N;
-    
+
 
     return 0;
 }
@@ -108,37 +111,37 @@ int td::initMatrix() {
  */
 int td::boundaryCalculate(float*** matrix) {
     //x = const
-    for (int j = 0; j < N; j++) {
-        for (int k = 0; k < N; k++) {
+    for (int j = 0; j < N + 1; j++) {
+        for (int k = 0; k < N + 1; k++) {
             float t = iterationsCount * tau;
 
             matrix[0][j][k] = t0yz(t, j, k, matrix);
-            matrix[N - 1][j][k] = tNyz(t, j, k, matrix);
+            matrix[N][j][k] = tNyz(t, j, k, matrix);
         }
     }
 
     //y = const
-    for (int i = 0; i < N; i++) {
-        for (int k = 0; k < N; k++) {
+    for (int i = 0; i < N + 1; i++) {
+        for (int k = 0; k < N + 1; k++) {
             float t = iterationsCount * tau;
 
             matrix[i][0][k] = tx0z(t, i, k, matrix);
-            matrix[i][N - 1][k] = txNz(t, i, k, matrix);
+            matrix[i][N][k] = txNz(t, i, k, matrix);
         }
     }
 
 
     //z = const
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
+    for (int i = 0; i < N + 1; i++) {
+        for (int j = 0; j < N + 1; j++) {
             float t = iterationsCount * tau;
 
             matrix[i][j][0] = txy0(t, i, j, matrix);
-            matrix[i][j][N - 1] = txyN(t, i, j, matrix);
+            matrix[i][j][N] = txyN(t, i, j, matrix);
         }
     }
-    
-    
+
+
     return 0;
 }
 
@@ -146,21 +149,21 @@ int td::solve() {
 
     float maxDifference = 1;
     iterationsCount = 0;
-    
+
     //Считаем значения на границе
     boundaryCalculate(solution);
-    
+
     while ((maxDifference > Eps) && (iterationsCount < maxIterations)) {
         iterationsCount++;
         maxDifference = 0;
 
         //Считаем значения на границе
         boundaryCalculate(tempSolution);
-        
+
         //Считаем во внутренних точках
-        for (int i = 1; i < N - 1; i++) {
-            for (int j = 1; j < N - 1; j++) {
-                for (int k = 1; k < N - 1; k++) {
+        for (int i = 1; i < N; i++) {
+            for (int j = 1; j < N; j++) {
+                for (int k = 1; k < N; k++) {
                     //Разница
                     float difference = RhoSqr * tau / h / h * (solution[i + 1][j][k] + solution[i - 1][j][k] + solution[i][j + 1][k] + solution[i][j - 1][k] + solution[i][j][k + 1] + solution[i + 1][j][k - 1] - 6 * solution[i][j][k]);
 
@@ -271,9 +274,9 @@ float td::txNz(float t, int x, int z, float*** matrix) {
  */
 int td::printMatrix(float ***matrix) {
     printf("x y z f\n");
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            for (int k = 0; k < N; k++) {
+    for (int i = 0; i < N + 1; i++) {
+        for (int j = 0; j < N + 1; j++) {
+            for (int k = 0; k < N + 1; k++) {
                 printf("%d %d %d %.3f\n", i, j, k, matrix[i][j][k]);
             }
         }
@@ -292,16 +295,74 @@ int td::printMatrixToFile(char* path) {
     FILE *outfile = fopen(path, "w");
 
     fprintf(outfile, "#x     y     z      f\n");
-    for (int i = 0; i < N; i++) {
+    for (int i = 0; i < N + 1; i++) {
         float x = i * xStep;
-        for (int j = 0; j < N; j++) {
+        for (int j = 0; j < N + 1; j++) {
             float y = j * yStep;
-            for (int k = 0; k < N; k++) {
+            for (int k = 0; k < N + 1; k++) {
                 float z = k * zStep;
                 fprintf(outfile, "%.5f %.5f %.5f %.5f\n", x, y, z, solution[i][j][k]);
             }
         }
     }
+
+    fclose(outfile);
+
+    return 0;
+}
+
+/**
+ * Выводим в файл в формате GNUPLOT
+ * Ставим перевод строки после каждого объединения
+ * 
+ * @param path
+ * @return 
+ */
+int td::printMatrixToFileGnuPlotFormat(char *path, int groupCount) {
+
+    //Сначала ищем максимум и минимум по матрице, чтобы сформировать группы
+    float maxValue = FLT_MIN;
+    float minValue = FLT_MAX;
+    for (int i = 0; i < N + 1; i++) {
+        for (int j = 0; j < N + 1; j++) {
+            for (int k = 0; k < N + 1; k++) {
+                maxValue = max(maxValue, solution[i][j][k]);
+                minValue = min(minValue, solution[i][j][k]);
+            }
+        }
+    }
+
+    //Считаем шаг
+    float step = (maxValue - minValue) / groupCount;
+
+
+
+    //Печатаем в файл
+    FILE *outfile = fopen(path, "w");
+
+    fprintf(outfile, "#x     y     z      f\n");
+    int printfcount = 0;
+    float currentPointer = minValue;
+    while (currentPointer < maxValue) {
+        for (int i = 0; i < N + 1; i+= 10) {
+            float x = i * xStep;
+            for (int j = 0; j < N + 1; j+= 10) {
+                float y = j * yStep;
+                for (int k = 0; k < N + 1; k+= 10) {
+                    if ((solution[i][j][k] >= currentPointer) && (solution[i][j][k] < currentPointer + step)) {
+                        float z = k * zStep;
+                        fprintf(outfile, "%.2f %.2f %.2f %.2f\n", x, y, z, currentPointer);
+                        printfcount++;
+                    }
+                }
+            }
+        }
+        //Перевод строки для обозначения группы
+        fprintf(outfile, "\n");
+        currentPointer += step;
+    }
+    
+    printf("Printf count: %d\n", printfcount);
 
     fclose(outfile);
 
