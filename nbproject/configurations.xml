@@ -36,6 +36,9 @@
         <compilerSet>GNU|GNU</compilerSet>
       </toolsSet>
       <compileType>
+        <ccTool>
+          <commandLine>-fopenmp</commandLine>
+        </ccTool>
       </compileType>
     </conf>
     <conf name="Release" type="1">

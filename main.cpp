@@ -9,13 +9,14 @@
 #include <math.h>
 #include <stdio.h>
 
+
 #include "td.h"
 /**
  * Entry point
  */
 int main(int argc, char** argv) {
     
-    td* solution = new td(100, 1, 0.0001, 0.003, 0.00001);
+    td* solution = new td(100, 1, 0.00001, 0.003, 0.000001);
     
     solution->initMatrix();
     solution->enableDebugMode(100);
@@ -23,8 +24,8 @@ int main(int argc, char** argv) {
     
     printf("IterationsCount = %d\n", solution->getIterationsCount());
     
-    
-    solution->printMatrixToFileGnuPlotFormat("outfile.txt", 10);
+    solution->printMatrixToFile("outfile-full.txt");
+    solution->printMatrixToFileGnuPlotFormat("outfile-gnu.txt", 10);
 
     return 0;
 }

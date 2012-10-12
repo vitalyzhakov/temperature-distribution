@@ -12,7 +12,11 @@
 #include <iostream>
 #include <float.h>
 #include <algorithm>
+#include <omp.h>
+
 using namespace std;
+
+
 
 //Конструктор
 
@@ -153,33 +157,45 @@ int td::solve() {
     //Считаем значения на границе
     boundaryCalculate(solution);
 
+    printf ("Max threads: %d\n", omp_get_max_threads());
     while ((maxDifference > Eps) && (iterationsCount < maxIterations)) {
         iterationsCount++;
         maxDifference = 0;
 
         //Считаем значения на границе
         boundaryCalculate(tempSolution);
+        
 
         //Считаем во внутренних точках
+        #pragma omp parallel
+        #pragma omp for
         for (int i = 1; i < N; i++) {
+            float tempIDiff = 0;
             for (int j = 1; j < N; j++) {
+                float tempJDiff = 0;
                 for (int k = 1; k < N; k++) {
                     //Разница
-                    float difference = RhoSqr * tau / h / h * (solution[i + 1][j][k] + solution[i - 1][j][k] + solution[i][j + 1][k] + solution[i][j - 1][k] + solution[i][j][k + 1] + solution[i + 1][j][k - 1] - 6 * solution[i][j][k]);
+                    float difference = RhoSqr * tau / h / h * 
+                        (solution[i + 1][j][k] + solution[i - 1][j][k] + solution[i][j + 1][k] + solution[i][j - 1][k] + solution[i][j][k + 1] + solution[i + 1][j][k - 1] - 6 * solution[i][j][k]);
 
                     //Новое значение
                     tempSolution[i][j][k] += difference;
-                    //Условие по eps
-                    if (difference > maxDifference) {
-                        maxDifference = difference;
-                    }
+                    
+                    tempJDiff = fmax(tempJDiff, fabs(difference));
                 }
+                
+                //Новое значение
+                tempIDiff = fmax(tempIDiff, tempJDiff);
             }
+            
+            //Условие по eps
+            #pragma omp critical
+            maxDifference = fmax(maxDifference, tempIDiff);
         }
         //Если включена отладка, выводим найденную разницу через заданное количество шагов
         if (debugMode) {
             if (iterationsCount % debugStep == 1) {
-                printf("maxDiff %.7f on iteration %d\n", maxDifference, iterationsCount);
+                printf("maxDiff %.10f on iteration %d\n", maxDifference, iterationsCount);
             }
         }
 
