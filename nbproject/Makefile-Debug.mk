@@ -43,8 +43,8 @@ OBJECTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=-fopenmp
-CXXFLAGS=-fopenmp
+CCFLAGS=-m64 -fopenmp
+CXXFLAGS=-m64 -fopenmp
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -66,12 +66,12 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/temperature-distribution: ${OBJECTFIL
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -O3 -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
 
 ${OBJECTDIR}/td.o: td.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/td.o td.cpp
+	$(COMPILE.cc) -O3 -MMD -MP -MF $@.d -o ${OBJECTDIR}/td.o td.cpp
 
 # Subprojects
 .build-subprojects:

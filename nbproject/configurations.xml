@@ -37,6 +37,8 @@
       </toolsSet>
       <compileType>
         <ccTool>
+          <developmentMode>6</developmentMode>
+          <architecture>2</architecture>
           <commandLine>-fopenmp</commandLine>
         </ccTool>
       </compileType>

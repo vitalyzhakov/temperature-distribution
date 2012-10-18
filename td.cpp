@@ -317,68 +317,10 @@ int td::printMatrixToFile(char* path) {
             float y = j * yStep;
             for (int k = 0; k < N + 1; k++) {
                 float z = k * zStep;
-                fprintf(outfile, "%.5f %.5f %.5f %.5f\n", x, y, z, solution[i][j][k]);
+                fprintf(outfile, "%f %f %f %f\n", x, y, z, solution[i][j][k]);
             }
         }
     }
-
-    fclose(outfile);
-
-    return 0;
-}
-
-/**
- * Выводим в файл в формате GNUPLOT
- * Ставим перевод строки после каждого объединения
- * 
- * @param path
- * @return 
- */
-int td::printMatrixToFileGnuPlotFormat(char *path, int groupCount) {
-
-    //Сначала ищем максимум и минимум по матрице, чтобы сформировать группы
-    float maxValue = FLT_MIN;
-    float minValue = FLT_MAX;
-    for (int i = 0; i < N + 1; i++) {
-        for (int j = 0; j < N + 1; j++) {
-            for (int k = 0; k < N + 1; k++) {
-                maxValue = max(maxValue, solution[i][j][k]);
-                minValue = min(minValue, solution[i][j][k]);
-            }
-        }
-    }
-
-    //Считаем шаг
-    float step = (maxValue - minValue) / groupCount;
-
-
-
-    //Печатаем в файл
-    FILE *outfile = fopen(path, "w");
-
-    fprintf(outfile, "#x     y     z      f\n");
-    int printfcount = 0;
-    float currentPointer = minValue;
-    while (currentPointer < maxValue) {
-        for (int i = 0; i < N + 1; i+= 10) {
-            float x = i * xStep;
-            for (int j = 0; j < N + 1; j+= 10) {
-                float y = j * yStep;
-                for (int k = 0; k < N + 1; k+= 10) {
-                    if ((solution[i][j][k] >= currentPointer) && (solution[i][j][k] < currentPointer + step)) {
-                        float z = k * zStep;
-                        fprintf(outfile, "%.2f %.2f %.2f %.2f\n", x, y, z, currentPointer);
-                        printfcount++;
-                    }
-                }
-            }
-        }
-        //Перевод строки для обозначения группы
-        fprintf(outfile, "\n");
-        currentPointer += step;
-    }
-    
-    printf("Printf count: %d\n", printfcount);
 
     fclose(outfile);
 

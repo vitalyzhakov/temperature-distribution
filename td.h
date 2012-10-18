@@ -20,7 +20,6 @@ public:
     int enableDebugMode(unsigned step);
     int disableDebugMode();
     int getIterationsCount();
-    int printMatrixToFileGnuPlotFormat(char *path, int groupCount);
     
 private:
     float ***solution;
