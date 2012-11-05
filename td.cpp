@@ -176,7 +176,7 @@ int td::solve() {
                 for (int k = 1; k < N; k++) {
                     //Разница
                     float difference = RhoSqr * tau / h / h * 
-                        (solution[i + 1][j][k] + solution[i - 1][j][k] + solution[i][j + 1][k] + solution[i][j - 1][k] + solution[i][j][k + 1] + solution[i + 1][j][k - 1] - 6 * solution[i][j][k]);
+                        (solution[i + 1][j][k] + solution[i - 1][j][k] + solution[i][j + 1][k] + solution[i][j - 1][k] + solution[i][j][k + 1] + solution[i][j][k - 1] - 6 * solution[i][j][k]);
 
                     //Новое значение
                     tempSolution[i][j][k] += difference;
